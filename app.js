@@ -77,6 +77,7 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
+	debugger;
 	console.log('request');
 	if (
 		req.query['hub.mode'] === 'subscribe' &&
@@ -701,7 +702,6 @@ function callSendAPI(messageData) {
 						recipientId
 					);
 				} else {
-					debugger;
 					console.log(
 						'Successfully called Send API for recipient %s',
 						recipientId
