@@ -212,6 +212,72 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "cancel_booking":
+      let bookingToken = parameters.fields["roomType"].stringValue;
+      let confirmCancel = parameters.fields["confirmCancel"].stringValue;
+
+      if (bookingToken === "" && confirmCancel === "") {
+        try {
+          const response = await axios.get(
+            `https://nexus-hotel-bot-backend.herokuapp.com/booking/info/id/${sender}`
+          );
+
+          if (response.status === 200) {
+            let replies = [];
+            const bookings = response.data;
+            bookings.forEach((booking) => {
+              let bookingDate = "";
+              if (
+                booking.bookingDate !== "" &&
+                booking.bookingDate.includes("T")
+              ) {
+                bookingDate = booking.bookingDate.substr(0, 10);
+              }
+
+              replies.push({
+                "content_type": "text",
+                "title": `Date: ${bookingDate} | RoomType: ${booking.roomType}`,
+                "payload": `${booking.token}`,
+              });
+            });
+
+            sendQuickReply(sender, messages.text.text[0], replies);
+          }
+        } catch (error) {
+          sendTextMessage(sender, "Error has occured");
+          sendTextMessage(
+            sender,
+            "Sorry for your trouble, Please try to book again"
+          );
+        }
+      } else if (bookingToken !== "" && confirmCancel === "") {
+        const replies = [
+          {
+            "content_type": "text",
+            "title": `Yes`,
+            "payload": `yes`,
+          },
+          {
+            "content_type": "text",
+            "title": `No`,
+            "payload": `no`,
+          },
+        ];
+        sendQuickReply(sender, messages.text.text[0], replies);
+      } else if (bookingToken !== "" && confirmCancel === "yes") {
+        const response = await axios.delete(
+          `https://nexus-hotel-bot-backend.herokuapp.com/booking/cancellation/${bookingToken}`
+        );
+
+        if (response.status === 200)
+          sendTextMessage(sender, "Booking Cancelled Successfully");
+        else sendTextMessage(sender, "Some error occurred. Please try again");
+      } else if (bookingToken !== "" && confirmCancel === "no") {
+        sendTextMessage(sender, "Ok! Booking not cancelled. Enjoy your stay");
+      } else {
+        handleMessages(messages, sender);
+      }
+      break;
     case "confirm_booking":
       for (let i = 0; i < contexts.length; i++) {
         //Extracting the context name
@@ -261,7 +327,7 @@ async function handleDialogFlowAction(
           //Making the api call
           try {
             const response = await axios.post(
-              "https://nexus-hotel-bot-backend.herokuapp.com//booking",
+              "https://nexus-hotel-bot-backend.herokuapp.com/booking",
               reqBody
             );
             if (response.status === 201) handleMessages(messages, sender);
@@ -271,7 +337,7 @@ async function handleDialogFlowAction(
                 "Some error occured while booking. Please try again later"
               );
           } catch (error) {
-            sendTextMessage(sender, "Following error has occured : " + error);
+            sendTextMessage(sender, "Error has occured");
             sendTextMessage(
               sender,
               "Sorry for your trouble, Please try to book again"
