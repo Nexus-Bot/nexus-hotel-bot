@@ -225,7 +225,7 @@ function handleDialogFlowAction(
         let gender = parameters.fields["gender"].stringValue;
 
         // Changing the bookingDate format to (YYYY-MM-DD)
-        if (bookingDate !== "" && bookingDate.contains("T")) {
+        if (bookingDate !== "" && bookingDate.includes("T")) {
           bookingDate = bookingDate.substr(0, 10);
         }
 
