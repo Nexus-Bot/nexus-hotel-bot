@@ -212,25 +212,37 @@ function handleDialogFlowAction(
 ) {
   switch (action) {
     case "confirm_booking":
-      console.log("in");
+      const contextName =
+        "projects/intelligencebot-mtbc/agent/sessions/da9f5f90-ae95-11eb-aec7-af126ee14d32/contexts/confirm_room";
+      for (let i = 0; i < contexts.length; i++) {
+        if (contexts[i] === contextName) {
+          // Getting all the values from params in variables
+          let age = contexts[i].parameters.fields["age"].stringValue;
+          let bookingDate =
+            contexts[i].parameters.fields["bookingDate"].stringValue;
+          let name = contexts[i].parameters.fields["name"].stringValue;
+          let aadhaarUID =
+            contexts[i].parameters.fields["aadhaarUID"].stringValue;
+          let roomType = contexts[i].parameters.fields["roomType"].stringValue;
+          let numberOfDays =
+            contexts[i].parameters.fields["numberOfDays"].stringValue;
+          let numberOfRooms =
+            contexts[i].parameters.fields["numberOfRooms"].stringValue;
+          let email = contexts[i].parameters.fields["email"].stringValue;
+          let gender = contexts[i].parameters.fields["gender"].stringValue;
+
+          // Changing the bookingDate format to (YYYY-MM-DD)
+          if (bookingDate !== "" && bookingDate.includes("T")) {
+            bookingDate = bookingDate.substr(0, 10);
+          }
+
+          console.log("ready for api");
+        }
+      }
       break;
     case "booking_details":
       if (parameters) {
-        // Getting all the values from params in variables
-        let age = parameters.fields["age"].stringValue;
-        let bookingDate = parameters.fields["bookingDate"].stringValue;
-        let name = parameters.fields["name"].stringValue;
-        let aadhaarUID = parameters.fields["aadhaarUID"].stringValue;
         let roomType = parameters.fields["roomType"].stringValue;
-        let numberOfDays = parameters.fields["numberOfDays"].stringValue;
-        let numberOfRooms = parameters.fields["numberOfRooms"].stringValue;
-        let email = parameters.fields["email"].stringValue;
-        let gender = parameters.fields["gender"].stringValue;
-
-        // Changing the bookingDate format to (YYYY-MM-DD)
-        if (bookingDate !== "" && bookingDate.includes("T")) {
-          bookingDate = bookingDate.substr(0, 10);
-        }
 
         //Sending quick replies for the room type
         if (messages && roomType === "") {
