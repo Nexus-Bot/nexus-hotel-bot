@@ -242,16 +242,13 @@ async function handleDialogFlowAction(
                 });
               });
 
-              sendQuickReply(sender, messages.text.text[0], replies);
+              sendQuickReply(sender, messages[0].text.text[0], replies);
             } else {
               sendTextMessage(sender, "Some error occurred. Please try again");
             }
           } catch (error) {
             sendTextMessage(sender, "Error has occured");
-            sendTextMessage(
-              sender,
-              "Sorry for your trouble, Please try to book again"
-            );
+            sendTextMessage(sender, "Sorry for your trouble, Please try again");
           }
         } else if (bookingToken !== "" && confirmCancel === "") {
           const replies = [
@@ -266,7 +263,7 @@ async function handleDialogFlowAction(
               "payload": `no`,
             },
           ];
-          sendQuickReply(sender, messages.text.text[0], replies);
+          sendQuickReply(sender, messages[0].text.text[0], replies);
         } else if (bookingToken !== "" && confirmCancel === "yes") {
           try {
             const response = await axios.delete(
@@ -279,10 +276,7 @@ async function handleDialogFlowAction(
               sendTextMessage(sender, "Some error occurred. Please try again");
           } catch (error) {
             sendTextMessage(sender, "Error has occured");
-            sendTextMessage(
-              sender,
-              "Sorry for your trouble, Please try to book again"
-            );
+            sendTextMessage(sender, "Sorry for your trouble, Please try again");
           }
         } else if (bookingToken !== "" && confirmCancel === "no") {
           sendTextMessage(sender, "Ok! Booking not cancelled. Enjoy your stay");
