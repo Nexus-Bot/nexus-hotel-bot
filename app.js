@@ -359,7 +359,7 @@ async function handleDialogFlowAction(
               );
           } catch (error) {
             if (error.response && error.response.status === 500)
-              sendTextMessage(sender, response.data);
+              sendTextMessage(sender, error.response.data);
             else {
               sendTextMessage(sender, "Error has occured");
               sendTextMessage(
