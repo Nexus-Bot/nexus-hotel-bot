@@ -352,19 +352,21 @@ async function handleDialogFlowAction(
               reqBody
             );
             if (response.status === 201) handleMessages(messages, sender);
-            else if (response.status === 500)
-              sendTextMessage(sender, response.data);
             else
               sendTextMessage(
                 sender,
                 "Some error occured while booking. Please try again later"
               );
           } catch (error) {
-            sendTextMessage(sender, "Error has occured");
-            sendTextMessage(
-              sender,
-              "Sorry for your trouble, Please try to book again"
-            );
+            if (error.response && error.response.status === 500)
+              sendTextMessage(sender, response.data);
+            else {
+              sendTextMessage(sender, "Error has occured");
+              sendTextMessage(
+                sender,
+                "Sorry for your trouble, Please try to book again"
+              );
+            }
           }
 
           break;
