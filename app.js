@@ -237,7 +237,7 @@ async function handleDialogFlowAction(
                   }
 
                   replies.push(
-                    `Booking Date: ${bookingDate} \n RoomType : ${booking.roomType} \n Booking Token:${booking.token}`
+                    `Booking Date: ${bookingDate} \nRoomType : ${booking.roomType} \nBooking Token: ${booking.token} \nNumber of Rooms: ${booking.numberOfRooms} \nNumber of Days: ${booking.numberOfDays}`
                   );
                   //   replies.push({
                   //     "content_type": "text",
@@ -249,6 +249,7 @@ async function handleDialogFlowAction(
                 replies.forEach((reply) => {
                   sendTextMessage(sender, reply);
                 });
+                handleMessages(messages, sender);
                 // sendQuickReply(sender, messages[0].text.text[0], replies);
               } else {
                 sendTextMessage(sender, "You have no bookings");
