@@ -242,6 +242,8 @@ async function handleDialogFlowAction(
             });
 
             sendQuickReply(sender, messages.text.text[0], replies);
+          } else {
+            sendTextMessage(sender, "Some error occurred. Please try again");
           }
         } catch (error) {
           sendTextMessage(sender, "Error has occured");
