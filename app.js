@@ -211,6 +211,9 @@ function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "confirm_booking":
+      console.log("in");
+      break;
     case "booking_details":
       if (parameters) {
         // Getting all the values from params in variables
