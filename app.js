@@ -213,7 +213,14 @@ function handleDialogFlowAction(
   switch (action) {
     case "confirm_booking":
       for (let i = 0; i < contexts.length; i++) {
-        if (contexts[i].name === "confirm_room") {
+        let contextName = "";
+        for (let j = contexts[i].name.length - 1; j >= 0; j--) {
+          if (contexts[i].name[j] === "/") {
+            contextName = contexts[i].name.substring(j + 1);
+            break;
+          }
+        }
+        if (contextName === "confirm_room") {
           // Getting all the values from params in variables
           let age = contexts[i].parameters.fields["age"].stringValue;
           let bookingDate =
