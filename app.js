@@ -213,6 +213,7 @@ function handleDialogFlowAction(
   switch (action) {
     case "booking_details":
       if (parameters) {
+        // Getting all the values from params in variables
         let age = parameters.fields["age"].stringValue;
         let bookingDate = parameters.fields["bookingDate"].stringValue;
         let name = parameters.fields["name"].stringValue;
@@ -223,6 +224,12 @@ function handleDialogFlowAction(
         let email = parameters.fields["email"].stringValue;
         let gender = parameters.fields["gender"].stringValue;
 
+        // Changing the bookingDate format to (YYYY-MM-DD)
+        if (bookingDate !== "" && bookingDate.contains("T")) {
+          bookingDate = bookingDate.substr(0, 10);
+        }
+
+        //Sending quick replies for the room type
         if (messages && roomType === "") {
           for (let i = 0; i < messages.length; i++) {
             if (
