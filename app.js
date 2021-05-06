@@ -222,17 +222,17 @@ function handleDialogFlowAction(
         }
         if (contextName === "confirm_room") {
           // Getting all the values from params in variables
-          let age = contexts[i].parameters.fields["age"].stringValue;
+          let age = contexts[i].parameters.fields["age"].numberValue;
           let bookingDate =
             contexts[i].parameters.fields["bookingDate"].stringValue;
           let name = contexts[i].parameters.fields["name"].stringValue;
           let aadhaarUID =
-            contexts[i].parameters.fields["aadhaarUID"].stringValue;
+            contexts[i].parameters.fields["aadhaarUID"].numberValue;
           let roomType = contexts[i].parameters.fields["roomType"].stringValue;
           let numberOfDays =
-            contexts[i].parameters.fields["numberOfDays"].stringValue;
+            contexts[i].parameters.fields["numberOfDays"].numberValue;
           let numberOfRooms =
-            contexts[i].parameters.fields["numberOfRooms"].stringValue;
+            contexts[i].parameters.fields["numberOfRooms"].numberValue;
           let email = contexts[i].parameters.fields["email"].stringValue;
           let gender = contexts[i].parameters.fields["gender"].stringValue;
 
