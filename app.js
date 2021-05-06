@@ -213,77 +213,82 @@ async function handleDialogFlowAction(
 ) {
   switch (action) {
     case "cancel_booking":
-      let bookingToken = parameters.fields["roomType"].stringValue;
-      let confirmCancel = parameters.fields["confirmCancel"].stringValue;
+      if (parameters) {
+        let bookingToken = parameters.fields["roomType"].stringValue;
+        let confirmCancel = parameters.fields["confirmCancel"].stringValue;
 
-      if (bookingToken === "" && confirmCancel === "") {
-        try {
-          const response = await axios.get(
-            `https://nexus-hotel-bot-backend.herokuapp.com/booking/info/id/${sender}`
-          );
+        if (bookingToken === "" && confirmCancel === "") {
+          try {
+            const response = await axios.get(
+              `https://nexus-hotel-bot-backend.herokuapp.com/booking/info/id/${sender}`
+            );
 
-          if (response.status === 200) {
-            let replies = [];
-            const bookings = response.data;
-            bookings.forEach((booking) => {
-              let bookingDate = "";
-              if (
-                booking.bookingDate !== "" &&
-                booking.bookingDate.includes("T")
-              ) {
-                bookingDate = booking.bookingDate.substr(0, 10);
-              }
+            if (response.status === 200) {
+              let replies = [];
+              const bookings = response.data;
+              bookings.forEach((booking) => {
+                let bookingDate = "";
+                if (
+                  booking.bookingDate !== "" &&
+                  booking.bookingDate.includes("T")
+                ) {
+                  bookingDate = booking.bookingDate.substr(0, 10);
+                }
 
-              replies.push({
-                "content_type": "text",
-                "title": `Date: ${bookingDate} | RoomType: ${booking.roomType}`,
-                "payload": `${booking.token}`,
+                replies.push({
+                  "content_type": "text",
+                  "title": `Date: ${bookingDate} | RoomType: ${booking.roomType}`,
+                  "payload": `${booking.token}`,
+                });
               });
-            });
 
-            sendQuickReply(sender, messages.text.text[0], replies);
-          } else {
-            sendTextMessage(sender, "Some error occurred. Please try again");
+              sendQuickReply(sender, messages.text.text[0], replies);
+            } else {
+              sendTextMessage(sender, "Some error occurred. Please try again");
+            }
+          } catch (error) {
+            sendTextMessage(sender, "Error has occured");
+            sendTextMessage(
+              sender,
+              "Sorry for your trouble, Please try to book again"
+            );
           }
-        } catch (error) {
-          sendTextMessage(sender, "Error has occured");
-          sendTextMessage(
-            sender,
-            "Sorry for your trouble, Please try to book again"
-          );
-        }
-      } else if (bookingToken !== "" && confirmCancel === "") {
-        const replies = [
-          {
-            "content_type": "text",
-            "title": `Yes`,
-            "payload": `yes`,
-          },
-          {
-            "content_type": "text",
-            "title": `No`,
-            "payload": `no`,
-          },
-        ];
-        sendQuickReply(sender, messages.text.text[0], replies);
-      } else if (bookingToken !== "" && confirmCancel === "yes") {
-        try {
-          const response = await axios.delete(
-            `https://nexus-hotel-bot-backend.herokuapp.com/booking/cancellation/${bookingToken}`
-          );
+        } else if (bookingToken !== "" && confirmCancel === "") {
+          const replies = [
+            {
+              "content_type": "text",
+              "title": `Yes`,
+              "payload": `yes`,
+            },
+            {
+              "content_type": "text",
+              "title": `No`,
+              "payload": `no`,
+            },
+          ];
+          sendQuickReply(sender, messages.text.text[0], replies);
+        } else if (bookingToken !== "" && confirmCancel === "yes") {
+          try {
+            const response = await axios.delete(
+              `https://nexus-hotel-bot-backend.herokuapp.com/booking/cancellation/${bookingToken}`
+            );
 
-          if (response.status === 200)
-            sendTextMessage(sender, "Booking Cancelled Successfully");
-          else sendTextMessage(sender, "Some error occurred. Please try again");
-        } catch (error) {
-          sendTextMessage(sender, "Error has occured");
-          sendTextMessage(
-            sender,
-            "Sorry for your trouble, Please try to book again"
-          );
+            if (response.status === 200)
+              sendTextMessage(sender, "Booking Cancelled Successfully");
+            else
+              sendTextMessage(sender, "Some error occurred. Please try again");
+          } catch (error) {
+            sendTextMessage(sender, "Error has occured");
+            sendTextMessage(
+              sender,
+              "Sorry for your trouble, Please try to book again"
+            );
+          }
+        } else if (bookingToken !== "" && confirmCancel === "no") {
+          sendTextMessage(sender, "Ok! Booking not cancelled. Enjoy your stay");
+        } else {
+          handleMessages(messages, sender);
         }
-      } else if (bookingToken !== "" && confirmCancel === "no") {
-        sendTextMessage(sender, "Ok! Booking not cancelled. Enjoy your stay");
       } else {
         handleMessages(messages, sender);
       }
