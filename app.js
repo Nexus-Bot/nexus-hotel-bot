@@ -214,7 +214,7 @@ async function handleDialogFlowAction(
   switch (action) {
     case "cancel_booking":
       if (parameters) {
-        let bookingToken = parameters.fields["roomType"].stringValue;
+        let bookingToken = parameters.fields["bookingToken"].stringValue;
         let confirmCancel = parameters.fields["confirmCancel"].stringValue;
 
         if (bookingToken === "" && confirmCancel === "") {
