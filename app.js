@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const app = express();
 const uuid = require("uuid");
+const axios = require("axios");
 
 // Messenger API parameters
 if (!config.FB_PAGE_TOKEN) {
@@ -203,7 +204,7 @@ function handleEcho(messageId, appId, metadata) {
   );
 }
 
-function handleDialogFlowAction(
+async function handleDialogFlowAction(
   sender,
   action,
   messages,
@@ -213,6 +214,7 @@ function handleDialogFlowAction(
   switch (action) {
     case "confirm_booking":
       for (let i = 0; i < contexts.length; i++) {
+        //Extracting the context name
         let contextName = "";
         for (let j = contexts[i].name.length - 1; j >= 0; j--) {
           if (contexts[i].name[j] === "/") {
@@ -220,6 +222,8 @@ function handleDialogFlowAction(
             break;
           }
         }
+
+        //Extracting data from context and making the API call
         if (contextName === "confirm_room") {
           // Getting all the values from params in variables
           let age = contexts[i].parameters.fields["age"].numberValue;
@@ -241,11 +245,43 @@ function handleDialogFlowAction(
             bookingDate = bookingDate.substr(0, 10);
           }
 
-          console.log("ready for api");
+          const reqBody = {
+            userID: sender.toString(),
+            age,
+            bookingDate,
+            name,
+            aadhaarUID: aadhaarUID.toString(),
+            roomType,
+            numberOfDays,
+            numberOfRooms,
+            email,
+            gender,
+          };
+
+          //Making the api call
+          try {
+            const response = await axios.post(
+              "https://nexus-hotel-bot-backend.herokuapp.com//booking",
+              reqBody
+            );
+            if (response.status === 201) handleMessages(messages, sender);
+            else
+              sendTextMessage(
+                sender,
+                "Some error occured while booking. Please try again later"
+              );
+          } catch (error) {
+            sendTextMessage(sender, "Following error has occured : " + error);
+            sendTextMessage(
+              sender,
+              "Sorry for your trouble, Please try to book again"
+            );
+          }
+
           break;
         }
       }
-      handleMessages(messages, sender);
+
       break;
     case "booking_details":
       if (parameters) {
