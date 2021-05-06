@@ -213,6 +213,88 @@ function handleDialogFlowAction(
 	parameters
 ) {
 	switch (action) {
+		case 'booking_details':
+			if (parameters) {
+				let age = parameters.fields['Age'];
+				let check_out_date = parameters.fields['check_out_date'];
+				let username = parameters.fields['username'];
+				let phone_number = parameters.fields['Phone_number'];
+				let type_of_room = parameters.fields['type_of_room'];
+				let check_in_date = parameters.fields['Check_in_date'];
+				let no_of_rooms = parameters.fields['NO_OF_ROOMS'];
+				let email = parameters.fields['Email'];
+				let members = parameters.fields['members'];
+
+				if (messages) {
+					for (let i = 0; i < messages.length; i++) {
+						if (
+							messages[i].platform === 'PLATFORM_UNSPECIFIED' &&
+							messages[i].text.text[0] ===
+								'Please choose your room type from the following'
+						) {
+							let replies = [
+								{
+									content_type: 'text',
+									title: 'SingleRoom',
+									payload: 'SingleRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'DoubleRoom',
+									payload: 'DoubleRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'TripleRoom',
+									payload: 'TripleRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'QwadRoom',
+									payload: 'QwadRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'TwinRoom',
+									payload: 'TwinRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'DeluxeRoom',
+									payload: 'DeluxeRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'SuperDeluxeRoom',
+									payload: 'SuperDeluxeRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'StudioRoom',
+									payload: 'StudioRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'ExecutiveSuiteRoom',
+									payload: 'ExecutiveSuiteRoom',
+								},
+								{
+									content_type: 'text',
+									title: 'PresidentialSuiteRoom',
+									payload: 'PresidentialSuiteRoom',
+								},
+							];
+							sendQuickReply(
+								sender,
+								messages[i].text.text[0],
+								replies
+							);
+							break;
+						}
+					}
+				}
+			}
+			break;
 		default:
 			//unhandled action, just send back the text
 			handleMessages(messages, sender);
