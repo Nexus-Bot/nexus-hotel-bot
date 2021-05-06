@@ -213,18 +213,18 @@ function handleDialogFlowAction(
   switch (action) {
     case "booking_details":
       if (parameters) {
-        let age = parameters.fields["age"];
-        let bookingDate = parameters.fields["bookingDate"];
-        let name = parameters.fields["name"];
-        let aadhaarUID = parameters.fields["aadhaarUID"];
-        let roomType = parameters.fields["roomType"];
-        let numberOfDays = parameters.fields["numberOfDays"];
-        let numberOfRooms = parameters.fields["numberOfRooms"];
-        let email = parameters.fields["email"];
-        let members = parameters.fields["members"];
-        let gender = parameters.fields["gender"];
+        let age = parameters.fields["age"].stringValue;
+        let bookingDate = parameters.fields["bookingDate"].stringValue;
+        let name = parameters.fields["name"].stringValue;
+        let aadhaarUID = parameters.fields["aadhaarUID"].stringValue;
+        let roomType = parameters.fields["roomType"].stringValue;
+        let numberOfDays = parameters.fields["numberOfDays"].stringValue;
+        let numberOfRooms = parameters.fields["numberOfRooms"].stringValue;
+        let email = parameters.fields["email"].stringValue;
+        let members = parameters.fields["members"].stringValue;
+        let gender = parameters.fields["gender"].stringValue;
 
-        if (messages) {
+        if (messages && roomType === "") {
           for (let i = 0; i < messages.length; i++) {
             if (
               messages[i].platform === "PLATFORM_UNSPECIFIED" &&
@@ -287,6 +287,8 @@ function handleDialogFlowAction(
               break;
             }
           }
+        } else {
+          handleMessages(messages, sender);
         }
       }
       break;
