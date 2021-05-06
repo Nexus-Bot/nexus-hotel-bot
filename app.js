@@ -213,15 +213,16 @@ function handleDialogFlowAction(
   switch (action) {
     case "booking_details":
       if (parameters) {
-        let age = parameters.fields["Age"];
-        let check_out_date = parameters.fields["check_out_date"];
-        let username = parameters.fields["username"];
-        let phone_number = parameters.fields["Phone_number"];
-        let type_of_room = parameters.fields["type_of_room"];
-        let check_in_date = parameters.fields["Check_in_date"];
-        let no_of_rooms = parameters.fields["NO_OF_ROOMS"];
-        let email = parameters.fields["Email"];
+        let age = parameters.fields["age"];
+        let bookingDate = parameters.fields["bookingDate"];
+        let name = parameters.fields["name"];
+        let aadhaarUID = parameters.fields["aadhaarUID"];
+        let roomType = parameters.fields["roomType"];
+        let numberOfDays = parameters.fields["numberOfDays"];
+        let numberOfRooms = parameters.fields["numberOfRooms"];
+        let email = parameters.fields["email"];
         let members = parameters.fields["members"];
+        let gender = parameters.fields["gender"];
 
         if (messages) {
           for (let i = 0; i < messages.length; i++) {
