@@ -226,23 +226,27 @@ async function handleDialogFlowAction(
             if (response.status === 200) {
               let replies = [];
               const bookings = response.data;
-              bookings.forEach((booking) => {
-                let bookingDate = "";
-                if (
-                  booking.bookingDate !== "" &&
-                  booking.bookingDate.includes("T")
-                ) {
-                  bookingDate = booking.bookingDate.substr(0, 10);
-                }
+              if (bookings.length > 0) {
+                bookings.forEach((booking) => {
+                  let bookingDate = "";
+                  if (
+                    booking.bookingDate !== "" &&
+                    booking.bookingDate.includes("T")
+                  ) {
+                    bookingDate = booking.bookingDate.substr(0, 10);
+                  }
 
-                replies.push({
-                  "content_type": "text",
-                  "title": `Date: ${bookingDate} | RoomType: ${booking.roomType}`,
-                  "payload": `${booking.token}`,
+                  replies.push({
+                    "content_type": "text",
+                    "title": `Date: ${bookingDate} \n RoomType: ${booking.roomType}`,
+                    "payload": `${booking.token}`,
+                  });
                 });
-              });
 
-              sendQuickReply(sender, messages[0].text.text[0], replies);
+                sendQuickReply(sender, messages[0].text.text[0], replies);
+              } else {
+                sendTextMessage(sender, "You have no bookings");
+              }
             } else {
               sendTextMessage(sender, "Some error occurred. Please try again");
             }
