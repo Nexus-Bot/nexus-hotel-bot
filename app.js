@@ -267,13 +267,21 @@ async function handleDialogFlowAction(
         ];
         sendQuickReply(sender, messages.text.text[0], replies);
       } else if (bookingToken !== "" && confirmCancel === "yes") {
-        const response = await axios.delete(
-          `https://nexus-hotel-bot-backend.herokuapp.com/booking/cancellation/${bookingToken}`
-        );
+        try {
+          const response = await axios.delete(
+            `https://nexus-hotel-bot-backend.herokuapp.com/booking/cancellation/${bookingToken}`
+          );
 
-        if (response.status === 200)
-          sendTextMessage(sender, "Booking Cancelled Successfully");
-        else sendTextMessage(sender, "Some error occurred. Please try again");
+          if (response.status === 200)
+            sendTextMessage(sender, "Booking Cancelled Successfully");
+          else sendTextMessage(sender, "Some error occurred. Please try again");
+        } catch (error) {
+          sendTextMessage(sender, "Error has occured");
+          sendTextMessage(
+            sender,
+            "Sorry for your trouble, Please try to book again"
+          );
+        }
       } else if (bookingToken !== "" && confirmCancel === "no") {
         sendTextMessage(sender, "Ok! Booking not cancelled. Enjoy your stay");
       } else {
