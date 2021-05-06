@@ -212,10 +212,8 @@ function handleDialogFlowAction(
 ) {
   switch (action) {
     case "confirm_booking":
-      const contextName =
-        "projects/intelligencebot-mtbc/agent/sessions/da9f5f90-ae95-11eb-aec7-af126ee14d32/contexts/confirm_room";
       for (let i = 0; i < contexts.length; i++) {
-        if (contexts[i] === contextName) {
+        if (contexts[i].name === "confirm_room") {
           // Getting all the values from params in variables
           let age = contexts[i].parameters.fields["age"].stringValue;
           let bookingDate =
