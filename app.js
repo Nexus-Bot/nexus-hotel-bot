@@ -237,8 +237,10 @@ function handleDialogFlowAction(
           }
 
           console.log("ready for api");
+          break;
         }
       }
+      handleMessages(messages, sender);
       break;
     case "booking_details":
       if (parameters) {
