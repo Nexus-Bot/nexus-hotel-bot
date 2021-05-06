@@ -236,14 +236,20 @@ async function handleDialogFlowAction(
                     bookingDate = booking.bookingDate.substr(0, 10);
                   }
 
-                  replies.push({
-                    "content_type": "text",
-                    "title": `Date: ${bookingDate} \n RoomType: ${booking.roomType}`,
-                    "payload": `${booking.token}`,
-                  });
+                  replies.push(
+                    `Booking Date: ${bookingDate} \n RoomType : ${booking.roomType} \n Booking Token:${booking.token}`
+                  );
+                  //   replies.push({
+                  //     "content_type": "text",
+                  //     "title": `Date: ${bookingDate} \n RoomType: ${booking.roomType}`,
+                  //     "payload": `${booking.token}`,
+                  //   });
                 });
 
-                sendQuickReply(sender, messages[0].text.text[0], replies);
+                replies.forEach((reply) => {
+                  sendTextMessage(sender, reply);
+                });
+                // sendQuickReply(sender, messages[0].text.text[0], replies);
               } else {
                 sendTextMessage(sender, "You have no bookings");
                 sendToDialogFlow(sender, "cancel");
