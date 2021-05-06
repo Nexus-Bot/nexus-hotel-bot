@@ -246,6 +246,7 @@ async function handleDialogFlowAction(
                 sendQuickReply(sender, messages[0].text.text[0], replies);
               } else {
                 sendTextMessage(sender, "You have no bookings");
+                sendToDialogFlow(sender, "cancel");
               }
             } else {
               sendTextMessage(sender, "Some error occurred. Please try again");
