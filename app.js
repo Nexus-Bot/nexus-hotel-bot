@@ -221,7 +221,6 @@ function handleDialogFlowAction(
         let numberOfDays = parameters.fields["numberOfDays"].stringValue;
         let numberOfRooms = parameters.fields["numberOfRooms"].stringValue;
         let email = parameters.fields["email"].stringValue;
-        let members = parameters.fields["members"].stringValue;
         let gender = parameters.fields["gender"].stringValue;
 
         if (messages && roomType === "") {
