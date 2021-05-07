@@ -406,7 +406,9 @@ async function handleDialogFlowAction(
           } catch (error) {
             if (
               error.response &&
-              (error.response.status === 500 || error.response.status === 400)
+              (error.response.status === 500 ||
+                error.response.status === 400) &&
+              typeof error.response.data === "string"
             )
               sendTextMessage(sender, error.response.data);
             else {
