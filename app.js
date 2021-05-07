@@ -219,7 +219,7 @@ async function handleDialogFlowAction(
           bookingDate = bookingDate.substr(0, 10);
 
           try {
-            const response = await axios.get(
+            const response = await axios.post(
               "https://nexus-hotel-bot-backend.herokuapp.com/isAvailable",
               { date: bookingDate }
             );
