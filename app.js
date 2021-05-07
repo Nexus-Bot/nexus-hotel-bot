@@ -395,6 +395,8 @@ async function handleDialogFlowAction(
                 sender,
                 `Here is your Booking Token for future reference. Please save it somewhere. \nBooking Token : ${response.data.token}`
               );
+            } else if (response.status === 400) {
+              sendTextMessage(sender, response.data);
             } else {
               sendTextMessage(
                 sender,
