@@ -243,6 +243,8 @@ async function handleDialogFlowAction(
             sendTextMessage(sender, "Error has occured");
             sendTextMessage(sender, "Sorry for your trouble, Please try again");
           }
+        } else {
+          handleMessages(messages, sender);
         }
       } else {
         handleMessages(messages, sender);
