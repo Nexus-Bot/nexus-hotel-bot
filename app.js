@@ -404,7 +404,10 @@ async function handleDialogFlowAction(
               );
             }
           } catch (error) {
-            if (error.response && error.response.status === 500)
+            if (
+              error.response &&
+              (error.response.status === 500 || error.response.status === 400)
+            )
               sendTextMessage(sender, error.response.data);
             else {
               sendTextMessage(sender, "Error has occured");
