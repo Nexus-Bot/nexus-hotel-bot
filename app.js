@@ -212,6 +212,42 @@ async function handleDialogFlowAction(
   parameters
 ) {
   switch (action) {
+    case "check_availability":
+      if (parameters) {
+        let bookingDate = parameters.fields["Date"].stringValue;
+        if (bookingDate !== "" && bookingDate.includes("T")) {
+          bookingDate = bookingDate.substr(0, 10);
+
+          try {
+            const response = await axios.get(
+              "https://nexus-hotel-bot-backend.herokuapp.com/isAvailable",
+              { date: bookingDate }
+            );
+
+            if (response.status === 200) {
+              const data = Object.entries(response.data);
+              let text = ``;
+              data.forEach((item) => {
+                text += `${item[0]}: ${item[1]}\n`;
+              });
+
+              sendTextMessage(
+                sender,
+                `Following is the availablity of rooms on ${bookingDate}`
+              );
+              sendTextMessage(sender, text);
+            } else {
+              sendTextMessage(sender, response.data);
+            }
+          } catch (error) {
+            sendTextMessage(sender, "Error has occured");
+            sendTextMessage(sender, "Sorry for your trouble, Please try again");
+          }
+        }
+      } else {
+        handleMessages(messages, sender);
+      }
+      break;
     case "cancel_booking":
       if (parameters) {
         let bookingToken = parameters.fields["bookingToken"].stringValue;
@@ -351,12 +387,18 @@ async function handleDialogFlowAction(
               "https://nexus-hotel-bot-backend.herokuapp.com/booking",
               reqBody
             );
-            if (response.status === 201) handleMessages(messages, sender);
-            else
+            if (response.status === 201) {
+              handleMessages(messages, sender);
+              sendTextMessage(
+                sender,
+                `Here is your Booking Token for future reference. Please save it somewhere. \nBooking Token : ${response.data.token}`
+              );
+            } else {
               sendTextMessage(
                 sender,
                 "Some error occured while booking. Please try again later"
               );
+            }
           } catch (error) {
             if (error.response && error.response.status === 500)
               sendTextMessage(sender, error.response.data);
